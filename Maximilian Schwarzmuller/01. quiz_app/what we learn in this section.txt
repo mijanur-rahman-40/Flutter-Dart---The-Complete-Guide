@@ -1,0 +1,5 @@
+1. How flutter app starts and works.
+2. Working with widgets and building custom widgets.
+3. Reacting to user events.
+4. Stateless and State full widgets.
+5. Dart fundamentals.
