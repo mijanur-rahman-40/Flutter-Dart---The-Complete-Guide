@@ -1,0 +1,5 @@
+<p>"for"&nbsp;Loops are an important language feature in many programming languages - the same is true for Dart.</p><p>You learned about this syntax:</p><pre class="prettyprint linenums">for (var i = 0; i &lt; recentTransactions.length; i++) {
+    print(recentTransactions[i]); // access list items with [i] =&gt;&nbsp;i is dynamic!
+}</pre><p>Looping through a list (to then do something with each list item) is such a common case, that Dart actually has a different kind of "for" loop as well:</p><pre class="prettyprint linenums">for (var tx in recentTransactions) {
+    print(tx);&nbsp;// tx is the item already! Changes with every iteration of course
+}</pre><p>It's of course up to you which approach you use - you should definitely be aware of both approaches, also because some programming languages only offer approach #1 and not approach #2.</p>
