@@ -16,38 +16,31 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: MyHomePage(),
       title: 'Personal Expensess App',
-      // colored the uncolred defauld widget
+      // colored the uncolored defauld widget
       theme: ThemeData(
         primarySwatch: Colors.purple,
-        primaryColorDark: Colors.redAccent,
+        // primaryColorDark: Colors.redAccent,
         // accentColor: Colors.green,
-        fontFamily: 'Quicksand',
+        // fontFamily: 'Quicksand',
+        errorColor: Colors.red,
+        fontFamily: 'OpenSans',
         textTheme: ThemeData.light().textTheme.copyWith(
-            headline6: TextStyle(
-              fontFamily: 'OpenSans',
-              fontWeight: FontWeight.normal,
-              fontSize: 20,
+              button: TextStyle(color: Colors.white),
+              headline6: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Colors.purple),
+              headline5: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              headline4: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purple),
+              headline3: TextStyle(color: Colors.purple, fontSize: 14),
+              headline2: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+              bodyText1: TextStyle(fontSize: 20),
+              subtitle1: TextStyle(fontSize: 22),
+              subtitle2: TextStyle(fontSize: 20),
             ),
-            headline5: TextStyle(
-              fontFamily: 'OpenSans',
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-            headline4: TextStyle(
-              fontFamily: 'OpenSans',
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
-            headline3: TextStyle(
-              fontFamily: 'OpenSans',
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
-            headline2: TextStyle(
-              fontFamily: 'OpenSans',
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-            )),
         appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
                 // title: TextStyle(
@@ -110,8 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // for controlling click
           return GestureDetector(
             onTap: () {},
-            child: NewTransaction((transactionTitle, transactionAmount) =>
-                _addNewTransaction(transactionTitle, transactionAmount)),
+            child: NewTransaction(_addNewTransaction),
             behavior: HitTestBehavior.opaque,
           );
         });
@@ -145,12 +137,13 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addNewTransaction(String transactionTitle, double transactionAmount) {
+  void _addNewTransaction(
+      String transactionTitle, double transactionAmount, DateTime chosenDate) {
     final newTransaction = Transaction(
       id: DateTime.now().toString(),
       title: transactionTitle,
       amount: transactionAmount,
-      date: DateTime.now(),
+      date: chosenDate,
     );
 
     setState(() {
@@ -158,14 +151,18 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _deleteTransaction(String transactionId) {
+    setState(() {
+      _userTransactions
+          .removeWhere((transaction) => transaction.id == transactionId);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Personal Expenses',
-          // style: TextStyle(fontFamily: 'OpenSans'),
-        ),
+        title: Text('Personal Expenses'),
         actions: <Widget>[
           IconButton(
             iconSize: 35,
@@ -205,7 +202,11 @@ class _MyHomePageState extends State<MyHomePage> {
             //   child: Text('List of texes'),
             // )
             // UserTransactions()
-            TransactionList(_userTransactions)
+            // Expanded does not work cause ListView has infinite height, but Expanded also try to get infinite height, but that would not possible 
+            // Expanded(
+            //   child: TransactionList(_userTransactions, _deleteTransaction),
+            // )
+             TransactionList(_userTransactions, _deleteTransaction),
           ],
         ),
       ),
