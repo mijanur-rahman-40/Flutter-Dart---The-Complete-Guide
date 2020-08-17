@@ -1,4 +1,0 @@
-#Mon Aug 17 02:27:21 BDT 2020
-base.0=/home/mijanur/MYCODE/FLUTTER/flutter_course/Maximilian Schwarzmuller/04. responsive_&_adaptive_personal_expenses_ui_app/build/app/intermediates/dex/debug/mergeDexDebug/out/classes.dex
-path.0=classes.dex
-renamed.0=classes.dex
