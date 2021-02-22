@@ -64,7 +64,33 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+// WidgetsBindingObserver class helps to work with app life cycle
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
+  bool _showChart = false;
+  final List<Transaction> _userTransactions = [];
+
+  // add a listener by adding init state
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  // this method is called whenever app lifecycles changes
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(state);
+    super.didChangeAppLifecycleState(state);
+  }
+
+  // also want to clear that listener to lifecycles chnages when that widget that state widget required anymore
+  // also here to avoid memory leaks when this state object should be removed
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
   void _startAddNewTransaction(BuildContext context) {
     showModalBottomSheet(
         context: context,
@@ -76,10 +102,6 @@ class _MyHomePageState extends State<MyHomePage> {
           );
         });
   }
-
-  bool _showChart = false;
-
-  final List<Transaction> _userTransactions = [];
 
   List<Transaction> get _recentTransactions {
     return _userTransactions.where((transaction) {
@@ -114,6 +136,51 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _showChart = value;
     });
+  }
+
+  List<Widget> _buildLandscapeContent(
+      MediaQueryData mediaQuery, AppBar appBar, Widget transactionListWidget) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            'Show Chart',
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          // adaptive helps to choose a platform specific
+          Switch.adaptive(
+            // activeColor: Theme.of(context).accentColor,
+            value: _showChart,
+            onChanged: (value) => _switchChangeHandler(value),
+          )
+        ],
+      ),
+      _showChart
+          ? Container(
+              height: (mediaQuery.size.height -
+                      appBar.preferredSize.height -
+                      mediaQuery.padding.top) *
+                  0.7,
+              child: Chart(_recentTransactions),
+            )
+          : transactionListWidget
+    ];
+  }
+
+  List<Widget> _buildPortraitContent(
+      MediaQueryData mediaQuery, AppBar appBar, Widget transactionListWidget) {
+    return [
+      Container(
+        // to give the height dynamically, have to calculate height
+        height: (mediaQuery.size.height -
+                appBar.preferredSize.height -
+                mediaQuery.padding.top) *
+            0.3,
+        child: Chart(_recentTransactions),
+      ),
+      transactionListWidget
+    ];
   }
 
   @override
@@ -160,51 +227,18 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             if (isLandscape)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'Show Chart',
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
-                  // adaptive helps to choose a platform specific
-                  Switch.adaptive(
-                    // activeColor: Theme.of(context).accentColor,
-                    value: _showChart,
-                    onChanged: (value) => _switchChangeHandler(value),
-                  )
-                ],
-              ),
+              ..._buildLandscapeContent(
+                  mediaQuery, appBar, transactionListWidget),
             if (!isLandscape)
-              Container(
-                height: (mediaQuery.size.height -
-                        appBar.preferredSize.height -
-                        mediaQuery.padding.top) *
-                    0.3,
-                child: Chart(_recentTransactions),
-              ),
-            if (!isLandscape) transactionListWidget,
-            if (isLandscape)
-              _showChart
-                  ? Container(
-                      // to give the height dynamically, have to calculate height
-                      height: (mediaQuery.size.height -
-                              appBar.preferredSize.height -
-                              mediaQuery.padding.top) *
-                          0.7,
-                      child: Chart(_recentTransactions),
-                    )
-                  : transactionListWidget,
+              ..._buildPortraitContent(
+                  mediaQuery, appBar, transactionListWidget),
           ],
         ),
       ),
     );
 
     return Platform.isIOS
-        ? CupertinoPageScaffold(
-            child: pageBody,
-            navigationBar: appBar,
-          )
+        ? CupertinoPageScaffold(child: pageBody, navigationBar: appBar)
         : Scaffold(
             appBar: appBar,
             body: pageBody,
@@ -215,7 +249,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 : FloatingActionButton(
                     child: Icon(Icons.add, size: 40),
                     onPressed: () => _startAddNewTransaction(context),
-                  ),
-          );
+                  ));
   }
 }

@@ -1,0 +1,13 @@
+<p>In the lectures of this course, I always call <code>super.initState()</code>&nbsp;and similar methods <strong>LAST</strong>&nbsp;when overriding built-in methods.</p><p><em>Example:</em></p><pre class="prettyprint linenums">@override
+void initState() {
+    print('Do something...');
+    super.initState();
+}</pre><p>Whilst it won't make a visual&nbsp;(or performance-related)&nbsp;difference, it is actually now <strong>recommended</strong> to call <code>super.initState()</code> (etc.) <strong>FIRST</strong>:</p><pre class="prettyprint linenums">@override
+void initState() {
+    super.initState();
+    print('Do something...');
+}</pre><p>In <strong>production</strong>, the order will actually <strong>NOT&nbsp;make any difference</strong>. The only code executed by <code>initState()</code> in the parent class checks whether "everything is working as intended". It's a debugging-only check, which will have no impact in production mode.</p><p>In case you're interested, this is the code inside of the built-in <code>initState()</code> method:</p><pre class="prettyprint linenums">@protected
+@mustCallSuper
+void initState() {
+    assert(_debugLifecycleState == _StateLifecycle.created);
+}</pre><p><code>assert</code> is a Dart function that tests a condition and throws an error if it's not met. <code>_debugLifecycleState</code> is a property managed by Flutter to find out in which phase the state object currently is. During production, asserts aren't executed and <code>_debugLifecycleState</code> is not set.</p><p>During <strong>development</strong>, you'll also <strong>not face any problems</strong> because of changed order. Additional built-in checks will still run properly, the only minor difference is that some of your code may run before the check runs (which won't affect the check though, it'll still work properly).</p>

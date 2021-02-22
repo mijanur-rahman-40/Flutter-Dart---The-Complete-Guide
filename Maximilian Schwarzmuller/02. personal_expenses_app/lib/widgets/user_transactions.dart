@@ -38,12 +38,19 @@ class _UserTransactionsState extends State<UserTransactions> {
     });
   }
 
+  void _deleteTransaction(String transactionId) {
+    setState(() {
+      _userTransactions
+          .removeWhere((transaction) => transaction.id == transactionId);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         NewTransaction((title, amount) => _addNewTransaction(title, amount)),
-        TransactionList(_userTransactions),
+        TransactionList(_userTransactions, _deleteTransaction),
       ],
     );
   }
