@@ -9,16 +9,14 @@ import './product.dart';
 // with basically work like extending
 // here heve to use with instead of extends
 // mixin property add utility function provider with multiple classes
-/**
- * mixin Agility{
- *  var spen = 10;
- * void sitDown(){
- *   print('Sitting down.....)
- *    }
- *  }
- * clas Person with Agility{
- *  }
- */
+/// mixin Agility{
+///  var spen = 10;
+/// void sitDown(){
+///   print('Sitting down.....)
+///    }
+///  }
+/// clas Person with Agility{
+///  }
 class ProductsProvider with ChangeNotifier {
   List<Product> _items = [
     // Product(
@@ -119,6 +117,7 @@ class ProductsProvider with ChangeNotifier {
     const url = 'https://flutter-shop-app-93671.firebaseio.com/products.json';
     try {
       final response = await http.get(url);
+      print(response);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<Product> loadedProducts = [];
       extractedData.forEach((productId, productData) {
