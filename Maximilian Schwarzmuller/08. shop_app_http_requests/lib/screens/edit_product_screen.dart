@@ -40,7 +40,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     super.initState();
   }
 
-// feth data from outside
+// fetch data from outside
 // Called when a dependency of this [State] object changes.
   @override
   void didChangeDependencies() {

@@ -34,7 +34,7 @@ class Product with ChangeNotifier {
     // just like work setSate in provider package
     notifyListeners();
     final url =
-        'https://flutter-shop-app-93671.firebaseio.com/products/$id.json';
+        'https://flutter-shop-project-6012b-default-rtdb.firebaseio.com/products/$id.json';
     try {
       final response = await http.patch(
         url,

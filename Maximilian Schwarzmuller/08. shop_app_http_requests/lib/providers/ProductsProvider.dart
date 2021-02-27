@@ -114,11 +114,14 @@ class ProductsProvider with ChangeNotifier {
     // here response is a nested map
     // Map<String,Object> not like
     // it would be Map<String,dynamic>
-    const url = 'https://flutter-shop-app-93671.firebaseio.com/products.json';
+    const url =
+        'https://flutter-shop-project-6012b-default-rtdb.firebaseio.com/products.json';
     try {
       final response = await http.get(url);
-      print(response);
+      // here dynameic basically used for nested map
+      print(json.decode(response.body));
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      if (extractedData == null) return;
       final List<Product> loadedProducts = [];
       extractedData.forEach((productId, productData) {
         loadedProducts.add(Product(
@@ -139,7 +142,8 @@ class ProductsProvider with ChangeNotifier {
 
   // another way of implementing
   Future<void> addProduct(Product product) async {
-    const url = 'https://flutter-shop-app-93671.firebaseio.com/products.json';
+    const url =
+        'https://flutter-shop-project-6012b-default-rtdb.firebaseio.com/products.json';
 
     try {
       final response = await http.post(
@@ -171,7 +175,7 @@ class ProductsProvider with ChangeNotifier {
     final productIndex = _items.indexWhere((product) => product.id == id);
     if (productIndex >= 0) {
       final url =
-          'https://flutter-shop-app-93671.firebaseio.com/products/$id.json';
+          'https://flutter-shop-project-6012b-default-rtdb.firebaseio.com/products/$id.json';
       try {
         await http.patch(
           url,
@@ -195,7 +199,7 @@ class ProductsProvider with ChangeNotifier {
 
   Future<void> deleteProduct(String id) async {
     final url =
-        'https://flutter-shop-app-93671.firebaseio.com/products/$id.json';
+        'https://flutter-shop-project-6012b-default-rtdb.firebaseio.com/products/$id.json';
     final existingProductIndex =
         _items.indexWhere((product) => product.id == id);
     var existingProduct = _items[existingProductIndex];

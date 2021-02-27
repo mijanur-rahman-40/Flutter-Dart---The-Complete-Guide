@@ -137,6 +137,7 @@ class ProductItem extends StatelessWidget {
             // imageUrl,
             product.imageUrl,
             fit: BoxFit.cover,
+            height: 300,
           ),
         ),
         footer: GridTileBar(

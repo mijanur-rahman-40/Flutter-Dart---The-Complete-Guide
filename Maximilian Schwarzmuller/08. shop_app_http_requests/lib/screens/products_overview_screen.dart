@@ -25,6 +25,7 @@ class _ProductsOverviwScreenState extends State<ProductsOverviwScreen> {
   var _isInit = true;
   var _isLoading = false;
 
+  // it runs once
   @override
   void initState() {
     // Provider.of<ProductsProvider>(context).fetchAndSetProducts(); // WON'T WORK!
@@ -36,6 +37,7 @@ class _ProductsOverviwScreenState extends State<ProductsOverviwScreen> {
   }
 
   // another way to fetch data
+  // basically called after inintState
   @override
   void didChangeDependencies() {
     if (_isInit) {
@@ -90,7 +92,7 @@ class _ProductsOverviwScreenState extends State<ProductsOverviwScreen> {
               child: ch,
               value: cart.itemCount.toString(),
             ),
-            // this child is a bulder function child and it is static
+            // this child is a builder function child and it is static
             child: IconButton(
               icon: Icon(
                 Icons.shopping_cart,
