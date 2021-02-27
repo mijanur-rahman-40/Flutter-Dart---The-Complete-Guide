@@ -53,6 +53,7 @@ class OrdersProvider with ChangeNotifier {
       );
     });
     _orders = loadedOrders;
+    print(loadedOrders);
     notifyListeners();
   }
 
