@@ -8,10 +8,12 @@ import './screens/user_products_screen.dart';
 import './providers/OrdersProvider.dart';
 import './providers/CartProvider.dart';
 import './providers/ProductsProvider.dart';
+import './providers/AuthProvider.dart';
 
 import './screens/products_details_screen.dart';
 import './screens/products_overview_screen.dart';
 import './screens/cart_screen.dart';
+import './screens/auth_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -27,6 +29,7 @@ class MyApp extends StatelessWidget {
     // it is efficient into when works with GridView or ListView
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider.value(value: AuthProvider()),
         ChangeNotifierProvider.value(value: ProductsProvider()),
         ChangeNotifierProvider.value(value: CartProvider()),
         ChangeNotifierProvider.value(value: OrdersProvider())
@@ -36,6 +39,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.purple,
           accentColor: Colors.amberAccent,
           errorColor: Colors.red,
+          secondaryHeaderColor: Colors.white,
           fontFamily: 'Raleway',
           iconTheme: ThemeData.light()
               .iconTheme
@@ -56,7 +60,8 @@ class MyApp extends StatelessWidget {
                 bodyText1: TextStyle(fontSize: 20),
               ),
         ),
-        home: ProductsOverviwScreen(),
+        // home: ProductsOverviwScreen
+        home: AuthScreen(),
         routes: {
           ProductDetailsScreen.routeName: (context) => ProductDetailsScreen(),
           CartScreen.routeName: (context) => CartScreen(),
