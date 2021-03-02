@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/providers/AuthProvider.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/CartProvider.dart';
@@ -18,106 +19,9 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<CartProvider>(context, listen: false);
+    final authData = Provider.of<AuthProvider>(context, listen: false);
     // can also same thing done by Consumer without Provider
     // but it is good that wrap up with Consumer such a item that will change not for all single item
-    print('products rebuilds');
-    // return ClipRRect(
-    //   borderRadius: BorderRadius.circular(10),
-    //   child: GridTile(
-    //     child: GestureDetector(
-    //       onTap: () {
-    //         // Navigator.of(context).push(MaterialPageRoute(
-    //         //   builder: (context) => ProductDetailsScreen(),
-    //         // ));
-    //         Navigator.of(context).pushNamed(
-    //           ProductDetailsScreen.routeName,
-    //           // arguments: id,
-    //           arguments: product.id,
-    //         );
-    //       },
-    //       child: Image.network(
-    //         // imageUrl,
-    //         product.imageUrl,
-    //         fit: BoxFit.cover,
-    //       ),
-    //     ),
-    //     footer: GridTileBar(
-    //       backgroundColor: Colors.black54,
-    //       // to ensure that we are only change the isfavorite data with the help of consumer
-    //       leading: IconButton(
-    //           icon: Icon(
-    //               product.isFavorite ? Icons.favorite : Icons.favorite_border),
-    //           color: Theme.of(context).accentColor,
-    //           focusColor: Colors.purple,
-    //           // label: child
-    //           onPressed: () {
-    //             product.toggleFavoriteStatus();
-    //           },
-    //         ),
-    //         // child: Text('Never Change'),
-    //       title: Text(
-    //         // title,
-    //         product.title,
-    //         textAlign: TextAlign.center,
-    //       ),
-    //       trailing: IconButton(
-    //         icon: Icon(Icons.shopping_cart),
-    //         color: Theme.of(context).accentColor,
-    //         onPressed: () {},
-    //       ),
-    //     ),
-    //   ),
-    // );
-    // return Consumer<Product>(
-    //   builder: (context, product, child) => ClipRRect(
-    //     borderRadius: BorderRadius.circular(10),
-    //     child: GridTile(
-    //       child: GestureDetector(
-    //         onTap: () {
-    //           // Navigator.of(context).push(MaterialPageRoute(
-    //           //   builder: (context) => ProductDetailsScreen(),
-    //           // ));
-    //           Navigator.of(context).pushNamed(
-    //             ProductDetailsScreen.routeName,
-    //             // arguments: id,
-    //             arguments: product.id,
-    //           );
-    //         },
-    //         child: Image.network(
-    //           // imageUrl,
-    //           product.imageUrl,
-    //           fit: BoxFit.cover,
-    //         ),
-    //       ),
-    //       footer: GridTileBar(
-    //         backgroundColor: Colors.black54,
-    //         // to ensure that we are only change the isfavorite data with the help of consumer
-    //         leading:  IconButton(
-    //             icon: Icon(product.isFavorite
-    //                 ? Icons.favorite
-    //                 : Icons.favorite_border),
-    //             color: Theme.of(context).accentColor,
-    //             focusColor: Colors.purple,
-    //             // label: child
-    //             onPressed: () {
-    //               product.toggleFavoriteStatus();
-    //             },
-    //           ),
-    //           // child: Text('Never Change'),
-    //         title: Text(
-    //           // title,
-    //           product.title,
-    //           textAlign: TextAlign.center,
-    //         ),
-    //         trailing: IconButton(
-    //           icon: Icon(Icons.shopping_cart),
-    //           color: Theme.of(context).accentColor,
-    //           onPressed: () {},
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -151,7 +55,7 @@ class ProductItem extends StatelessWidget {
               focusColor: Colors.purple,
               // label: child
               onPressed: () {
-                product.toggleFavoriteStatus();
+                product.toggleFavoriteStatus(authData.token);
               },
             ),
             // child: Text('Never Change'),

@@ -21,14 +21,21 @@ class OrderItem {
 
 class OrdersProvider with ChangeNotifier {
   List<OrderItem> _orders = [];
+  String _authToken;
 
   List<OrderItem> get orders {
     return [..._orders];
   }
 
+  void update(authToken, orders) {
+    _authToken = authToken;
+    _orders = orders;
+    notifyListeners();
+  }
+
   Future<void> fetchAndSetOrders() async {
-    const url =
-        'https://flutter-shop-project-6012b-default-rtdb.firebaseio.com/orders.json';
+    final url =
+        'https://flutter-shop-project-6012b-default-rtdb.firebaseio.com/orders.json?auth=$_authToken';
     final response = await http.get(url);
     List<OrderItem> loadedOrders = [];
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -53,13 +60,12 @@ class OrdersProvider with ChangeNotifier {
       );
     });
     _orders = loadedOrders;
-    print(loadedOrders);
     notifyListeners();
   }
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
-    const url =
-        'https://flutter-shop-project-6012b-default-rtdb.firebaseio.com/orders.json';
+    final url =
+        'https://flutter-shop-project-6012b-default-rtdb.firebaseio.com/orders.json?auth=$_authToken';
     final timeStamp = DateTime.now();
     // toIso8601String -> uniform string representation
     final response = await http.post(
@@ -87,7 +93,6 @@ class OrdersProvider with ChangeNotifier {
         dateTime: DateTime.now(),
       ),
     );
-    print(json.decode(response.body)['name']);
     notifyListeners();
   }
 }

@@ -18,6 +18,7 @@ import './product.dart';
 /// clas Person with Agility{
 ///  }
 class ProductsProvider with ChangeNotifier {
+  String _authToken;
   List<Product> _items = [
     // Product(
     //   id: 'p1',
@@ -54,6 +55,12 @@ class ProductsProvider with ChangeNotifier {
   ];
 
   // var _showFavoritesOnly = false;
+
+  void update(authToken, items) {
+    _items = items;
+    _authToken = authToken;
+    notifyListeners();
+  }
 
   List<Product> get items {
     // if (_showFavoritesOnly) {
@@ -114,8 +121,8 @@ class ProductsProvider with ChangeNotifier {
     // here response is a nested map
     // Map<String,Object> not like
     // it would be Map<String,dynamic>
-    const url =
-        'https://flutter-shop-project-6012b-default-rtdb.firebaseio.com/products.json';
+    final url =
+        'https://flutter-shop-project-6012b-default-rtdb.firebaseio.com/products.json?auth=$_authToken';
     try {
       final response = await http.get(url);
       // here dynameic basically used for nested map
@@ -142,8 +149,8 @@ class ProductsProvider with ChangeNotifier {
 
   // another way of implementing
   Future<void> addProduct(Product product) async {
-    const url =
-        'https://flutter-shop-project-6012b-default-rtdb.firebaseio.com/products.json';
+    final url =
+        'https://flutter-shop-project-6012b-default-rtdb.firebaseio.com/products.json?auth=$_authToken';
 
     try {
       final response = await http.post(
@@ -175,7 +182,7 @@ class ProductsProvider with ChangeNotifier {
     final productIndex = _items.indexWhere((product) => product.id == id);
     if (productIndex >= 0) {
       final url =
-          'https://flutter-shop-project-6012b-default-rtdb.firebaseio.com/products/$id.json';
+          'https://flutter-shop-project-6012b-default-rtdb.firebaseio.com/products/$id.json?auth=$_authToken';
       try {
         await http.patch(
           url,
@@ -199,7 +206,7 @@ class ProductsProvider with ChangeNotifier {
 
   Future<void> deleteProduct(String id) async {
     final url =
-        'https://flutter-shop-project-6012b-default-rtdb.firebaseio.com/products/$id.json';
+        'https://flutter-shop-project-6012b-default-rtdb.firebaseio.com/products/$id.json?auth=$_authToken';
     final existingProductIndex =
         _items.indexWhere((product) => product.id == id);
     var existingProduct = _items[existingProductIndex];
