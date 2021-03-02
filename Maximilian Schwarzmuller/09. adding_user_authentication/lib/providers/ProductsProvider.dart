@@ -179,6 +179,7 @@ class ProductsProvider with ChangeNotifier {
   }
 
   Future<void> updateProduct(String id, Product newProduct) async {
+    print(id);
     final productIndex = _items.indexWhere((product) => product.id == id);
     if (productIndex >= 0) {
       final url =

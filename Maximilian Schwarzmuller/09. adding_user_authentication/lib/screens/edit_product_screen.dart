@@ -18,8 +18,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _imageUrlFocusNode = FocusNode();
   final _form = GlobalKey<FormState>();
 
-  var _editedProduct =
-      Product(id: null, title: '', description: '', price: 0, imageUrl: '');
+  var _editedProduct = Product(
+    id: null,
+    title: '',
+    description: '',
+    price: 0,
+    imageUrl: '',
+  );
 
   @override
   void dispose() {
@@ -109,20 +114,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
             );
           },
         );
-        // } finally {
-        //   setState(() {
-        //     _isLoading = false;
-        //   });
-        //   Navigator.of(context).pop();
-        // }
       }
-      setState(() {
+    }
+     setState(() {
         _isLoading = false;
       });
       Navigator.of(context).pop();
-      // Navigator.of(context).pop()
-      //  Navigator.of(context).pop();
-    }
   }
 
   @override
