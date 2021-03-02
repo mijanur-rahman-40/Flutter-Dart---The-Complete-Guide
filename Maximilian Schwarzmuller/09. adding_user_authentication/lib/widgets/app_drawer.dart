@@ -50,6 +50,8 @@ class AppDrawer extends StatelessWidget {
               // cause drawer is still open and this hanrd switch of widgets
               onTap: () {
                 Navigator.of(context).pop();
+                Navigator.of(context).pushReplacementNamed('/');
+
                 Provider.of<AuthProvider>(context, listen: false).logout();
               }),
         ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 import './screens/edit_product_screen.dart';
@@ -79,7 +80,16 @@ class MyApp extends StatelessWidget {
                 ),
           ),
           // home: ProductsOverviwScreen
-          home: auth.isAuth ? ProductsOverviwScreen() : AuthScreen(),
+          home: auth.isAuth
+              ? ProductsOverviwScreen()
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (context, authResulstSnapshot) =>
+                      authResulstSnapshot.connectionState ==
+                              ConnectionState.waiting
+                          ? SplashScreen()
+                          : AuthScreen(),
+                ),
           routes: {
             ProductDetailsScreen.routeName: (context) => ProductDetailsScreen(),
             CartScreen.routeName: (context) => CartScreen(),
