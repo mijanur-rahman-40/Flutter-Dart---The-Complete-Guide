@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
     //   create: (_) => ProductsProvider(),
     // if does not depend on the context then simply use .value
     // it is efficient into when works with GridView or ListView
-   
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: AuthProvider()),
@@ -37,22 +37,22 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<AuthProvider, ProductsProvider>(
           create: (context) => ProductsProvider(),
           update: (context, auth, previousProducts) => previousProducts
-            ..update(auth.token,
+            ..update(auth.token, auth.userId,
                 previousProducts.items == null ? [] : previousProducts.items),
         ),
         ChangeNotifierProxyProvider<AuthProvider, OrdersProvider>(
           create: (context) => OrdersProvider(),
           update: (context, auth, previousOrders) => previousOrders
-            ..update(auth.token,
+            ..update(auth.token, auth.userId,
                 previousOrders.orders == null ? [] : previousOrders.orders),
         ),
         ChangeNotifierProvider.value(value: CartProvider()),
         ChangeNotifierProvider.value(value: OrdersProvider())
       ],
-      // _ menas child (a statuc part)
+      // _ menas child (a static part)
       child: Consumer<AuthProvider>(
         builder: (context, auth, _) => MaterialApp(
-          title: 'MyShop'+ auth.isAuth.toString(),
+          title: 'MyShop',
           theme: ThemeData(
             primarySwatch: Colors.purple,
             accentColor: Colors.amberAccent,

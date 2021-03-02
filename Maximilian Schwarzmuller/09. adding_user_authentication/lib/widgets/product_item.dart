@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/CartProvider.dart';
 
-import '../providers/product.dart';
+import '../providers/SingleProductProvider.dart';
 // import 'package:shop_app/providers/products_provider.dart';
 import '../screens/products_details_screen.dart';
 
@@ -53,12 +53,10 @@ class ProductItem extends StatelessWidget {
                   product.isFavorite ? Icons.favorite : Icons.favorite_border),
               color: Theme.of(context).accentColor,
               focusColor: Colors.purple,
-              // label: child
               onPressed: () {
-                product.toggleFavoriteStatus(authData.token);
+                product.toggleFavoriteStatus(authData.token, authData.userId);
               },
             ),
-            // child: Text('Never Change'),
           ),
           title: Text(
             // title,

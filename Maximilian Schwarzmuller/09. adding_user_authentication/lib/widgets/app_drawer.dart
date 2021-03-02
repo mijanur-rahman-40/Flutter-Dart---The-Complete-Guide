@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/providers/AuthProvider.dart';
+import 'package:provider/provider.dart';
 
 import '../screens/orders_screen.dart';
 import '../screens/user_products_screen.dart';
@@ -40,6 +42,16 @@ class AppDrawer extends StatelessWidget {
                   .pushReplacementNamed(UserProductsScreen.routeName);
             },
           ),
+          Divider(),
+          ListTile(
+              leading: Icon(Icons.exit_to_app,
+                  color: Theme.of(context).primaryColor),
+              title: Text('Logout'),
+              // cause drawer is still open and this hanrd switch of widgets
+              onTap: () {
+                Navigator.of(context).pop();
+                Provider.of<AuthProvider>(context, listen: false).logout();
+              }),
         ],
       ),
     );
