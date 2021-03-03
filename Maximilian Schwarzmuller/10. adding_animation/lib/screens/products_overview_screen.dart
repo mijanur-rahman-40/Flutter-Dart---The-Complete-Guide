@@ -41,13 +41,9 @@ class _ProductsOverviwScreenState extends State<ProductsOverviwScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      setState(() {
-        _isLoading = true;
-      });
+      setState(() => _isLoading = true);
       Provider.of<ProductsProvider>(context).fetchAndSetProducts().then((_) {
-        setState(() {
-          _isLoading = false;
-        });
+        setState(() => _isLoading = false);
       });
     }
     _isInit = false;

@@ -88,9 +88,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       return;
     }
     _form.currentState.save();
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
     //that means want to editing
     if (_editedProduct.id != null) {
       await Provider.of<ProductsProvider>(context, listen: false)
@@ -116,10 +114,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
         );
       }
     }
-     setState(() {
-        _isLoading = false;
-      });
-      Navigator.of(context).pop();
+    setState(() => _isLoading = false);
+    Navigator.of(context).pop();
   }
 
   @override

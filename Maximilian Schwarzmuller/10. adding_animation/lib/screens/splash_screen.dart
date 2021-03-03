@@ -8,7 +8,7 @@ class SplashScreen extends StatelessWidget {
       child: Text(
         'Loading...',
         style: TextStyle(
-          color: Theme.of(context).secondaryHeaderColor,
+          color: Colors.blueGrey,
           fontSize: 40,
           fontFamily: 'Anton',
           fontWeight: FontWeight.normal,

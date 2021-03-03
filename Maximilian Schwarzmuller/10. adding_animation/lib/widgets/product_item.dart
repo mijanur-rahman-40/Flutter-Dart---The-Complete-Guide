@@ -27,23 +27,27 @@ class ProductItem extends StatelessWidget {
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
         child: GestureDetector(
-          onTap: () {
-            // Navigator.of(context).push(MaterialPageRoute(
-            //   builder: (context) => ProductDetailsScreen(),
-            // ));
-            Navigator.of(context).pushNamed(
-              ProductDetailsScreen.routeName,
-              // arguments: id,
-              arguments: product.id,
-            );
-          },
-          child: Image.network(
-            // imageUrl,
-            product.imageUrl,
-            fit: BoxFit.cover,
-            height: 300,
-          ),
-        ),
+            onTap: () {
+              // Navigator.of(context).push(MaterialPageRoute(
+              //   builder: (context) => ProductDetailsScreen(),
+              // ));
+              Navigator.of(context).pushNamed(
+                ProductDetailsScreen.routeName,
+                // arguments: id,
+                arguments: product.id,
+              );
+            },
+            // Hero is a scaling animation
+            child: Hero(
+              // must have a unique id
+              tag: product.id,
+              child: FadeInImage(
+                placeholder:
+                    AssetImage('assets/images/product-placeholder.png'),
+                image: NetworkImage(product.imageUrl),
+                fit: BoxFit.cover,
+              ),
+            )),
         footer: GridTileBar(
           backgroundColor: Colors.black54,
           // to ensure that we are only change the isfavorite data with the help of consumer
