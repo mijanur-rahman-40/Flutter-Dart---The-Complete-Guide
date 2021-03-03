@@ -116,6 +116,7 @@ class AuthProvider with ChangeNotifier {
 
     // delete as a single key
     // preferences.remove('userData');
+    // all clrear
     preferences.clear();
   }
 
