@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/helpers/custom_route.dart';
 import 'package:myapp/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -16,9 +17,7 @@ import './screens/products_overview_screen.dart';
 import './screens/cart_screen.dart';
 import './screens/auth_screen.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -48,9 +47,8 @@ class MyApp extends StatelessWidget {
                 previousOrders.orders == null ? [] : previousOrders.orders),
         ),
         ChangeNotifierProvider.value(value: CartProvider()),
-        ChangeNotifierProvider.value(value: OrdersProvider())
       ],
-      // _ menas child (a static part)
+      // _ means child (a static part)
       child: Consumer<AuthProvider>(
         builder: (context, auth, _) => MaterialApp(
           title: 'MyShop',
@@ -60,6 +58,13 @@ class MyApp extends StatelessWidget {
             errorColor: Colors.red,
             secondaryHeaderColor: Colors.white,
             fontFamily: 'Raleway',
+            // this is used for fade transition animtion on route name into app navigation bar
+            pageTransitionsTheme: PageTransitionsTheme(
+              builders: {
+                TargetPlatform.android: CustomPageTransitionBuilder(),
+                TargetPlatform.iOS: CustomPageTransitionBuilder(),
+              },
+            ),
             iconTheme: ThemeData.light()
                 .iconTheme
                 .copyWith(color: Colors.purple, size: 25),

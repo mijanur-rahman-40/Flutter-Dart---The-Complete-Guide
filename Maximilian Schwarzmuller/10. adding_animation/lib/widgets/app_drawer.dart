@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/helpers/custom_route.dart';
 import 'package:myapp/providers/AuthProvider.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +13,7 @@ class AppDrawer extends StatelessWidget {
       child: Column(
         children: <Widget>[
           AppBar(
-            title: Text('Hello Friend'),
+            title: Text('My Shop App'),
             // never add a back button
             automaticallyImplyLeading: false,
           ),
@@ -20,27 +21,26 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.shop, color: Theme.of(context).primaryColor),
             title: Text('Shop'),
-            onTap: () {
-              Navigator.of(context).pushReplacementNamed('/');
-            },
+            onTap: () => Navigator.of(context).pushReplacementNamed('/'),
           ),
           Divider(),
           ListTile(
             leading: Icon(Icons.payment, color: Theme.of(context).primaryColor),
             title: Text('Orders'),
-            onTap: () {
-              Navigator.of(context)
-                  .pushReplacementNamed(OrdersScreen.routeName);
-            },
+            onTap: () => Navigator.of(context)
+                .pushReplacementNamed(OrdersScreen.routeName),
+
+            // added transition fading animtion into this route
+            // onTap: () => Navigator.of(context).pushReplacement(
+            //   CustomRoute(widgetBuilder: (context) => OrdersScreen()),
+            // ),
           ),
           Divider(),
           ListTile(
             leading: Icon(Icons.edit, color: Theme.of(context).primaryColor),
             title: Text('Manage Products'),
-            onTap: () {
-              Navigator.of(context)
-                  .pushReplacementNamed(UserProductsScreen.routeName);
-            },
+            onTap: () => Navigator.of(context)
+                .pushReplacementNamed(UserProductsScreen.routeName),
           ),
           Divider(),
           ListTile(
@@ -51,7 +51,6 @@ class AppDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).pushReplacementNamed('/');
-
                 Provider.of<AuthProvider>(context, listen: false).logout();
               }),
         ],

@@ -20,7 +20,8 @@ class ProductDetailsScreen extends StatelessWidget {
       // appBar: AppBar(
       //   title: Text(loadedProduct.title),
       // ),
-      // slivers are just scrollable areas on the
+      // slivers are just scrollable areas on the view
+      // have to use custom scroll view
       body: CustomScrollView(
         slivers: [
           // SliverAppBar is a sliding app bar with hiding image
@@ -29,6 +30,7 @@ class ProductDetailsScreen extends StatelessWidget {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(loadedProduct.title),
+              // Hero is a animation type where object is perform with zoom in out
               background: Hero(
                 tag: loadedProduct.id,
                 child: Image.network(
