@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
                 bodyText1: TextStyle(fontSize: 20),
               ),
         ),
-        home: AddPlaceScreen(),
+        home: PlacesListScreen(),
         routes: {
           AddPlaceScreen.routeName: (context) => AddPlaceScreen(),
         },

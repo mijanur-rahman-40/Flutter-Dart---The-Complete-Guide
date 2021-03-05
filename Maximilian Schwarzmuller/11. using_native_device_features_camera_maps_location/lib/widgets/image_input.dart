@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart' as sysPaths;
+import 'package:path_provider/path_provider.dart' as systemPaths;
 
 class ImageInput extends StatefulWidget {
   // function type data
@@ -16,6 +16,7 @@ class ImageInput extends StatefulWidget {
 }
 
 class _ImageInputState extends State<ImageInput> {
+  // this basically stored the image without using any database
   File _storedImage;
 
   Future<void> _takePicture() async {
@@ -23,11 +24,14 @@ class _ImageInputState extends State<ImageInput> {
       source: ImageSource.camera,
       maxWidth: 600,
     );
+    if (imageFile == null) return;
     setState(() => _storedImage = imageFile);
     // getApplicationDocumentsDirectory => works for both android and ios
-    final appDirtoctory = await sysPaths.getApplicationDocumentsDirectory();
+    final appDirtoctory = await systemPaths.getApplicationDocumentsDirectory();
     final fileName = path.basename(imageFile.path);
     final savedImage = await imageFile.copy('${appDirtoctory.path}/$fileName');
+    // File: '/data/data/com.example.myapp/app_flutter/scaled_ba977008-3497-4d38-ad66-a7c99574bd11-860033944.jpg'
+    // print(savedImage);
 
     // widget => gloabal property which is available in state objects giving access to oue widget class
     widget.onSelectImage(savedImage);
