@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:myapp/helpers/db_helpers.dart';
+import 'package:myapp/helpers/location_helpers.dart';
 import 'package:myapp/models/place.dart';
 
 class GreatPlaces with ChangeNotifier {
@@ -11,11 +12,25 @@ class GreatPlaces with ChangeNotifier {
     return [..._items];
   }
 
-  void addPlace(String pickedTitle, File pickedImage) {
+  Place findById(String id) => _items.firstWhere((place) => place.id == id);
+
+  void addPlace(String pickedTitle, File pickedImage,
+      PlaceLocation pickedPlaceLocation) async {
+    final address = await LocationHelper.getPlaceAddress(
+      pickedPlaceLocation.latitude,
+      pickedPlaceLocation.longitude,
+    );
+
+    final updatedLocation = PlaceLocation(
+      latitude: pickedPlaceLocation.latitude,
+      longitude: pickedPlaceLocation.longitude,
+      address: address,
+    );
+
     final newPlace = Place(
       id: DateTime.now().toIso8601String(),
       title: pickedTitle,
-      placeLocation: null,
+      placeLocation: updatedLocation,
       image: pickedImage,
     );
 
@@ -26,6 +41,9 @@ class GreatPlaces with ChangeNotifier {
       'id': newPlace.id,
       'title': newPlace.title,
       'image': newPlace.image.path,
+      'locationLatitude': newPlace.placeLocation.latitude,
+      'locationLongitude': newPlace.placeLocation.longitude,
+      'address': newPlace.placeLocation.address,
     });
   }
 
@@ -35,11 +53,15 @@ class GreatPlaces with ChangeNotifier {
         .map((item) => Place(
               id: item['id'],
               title: item['title'],
-              placeLocation: null,
+              placeLocation: PlaceLocation(
+                latitude: item['locationLatitude'],
+                longitude: item['locationLongitude'],
+                address: item['address'],
+              ),
               // load from memory oh that file
-              image: File(item['']),
+              image: File(item['image']),
             ))
         .toList();
-    notifyListeners(); 
+    notifyListeners();
   }
 }

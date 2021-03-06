@@ -18,7 +18,6 @@ class ImageInput extends StatefulWidget {
 class _ImageInputState extends State<ImageInput> {
   // this basically stored the image without using any database
   File _storedImage;
-
   Future<void> _takePicture() async {
     final imageFile = await ImagePicker.pickImage(
       source: ImageSource.camera,

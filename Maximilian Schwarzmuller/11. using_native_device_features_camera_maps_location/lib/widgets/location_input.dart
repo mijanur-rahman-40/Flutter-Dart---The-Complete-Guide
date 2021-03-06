@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:myapp/helpers/location_helpers.dart';
 import 'package:myapp/screens/map_screen.dart';
 
 class LocationInput extends StatefulWidget {
+  //  get function from add place screen
+  final Function onSelectPlace;
+  LocationInput(this.onSelectPlace);
+
   @override
   _LocationInputState createState() => _LocationInputState();
 }
@@ -13,9 +18,18 @@ class _LocationInputState extends State<LocationInput> {
   Location location = new Location();
   LocationData _locationData;
 
+  void _showPreview({double latitude, double longitude}) {
+    final staticMapImageurl = LocationHelper.generateLocationPreviewImage(
+      latitude: latitude,
+      longitude: longitude,
+    );
+    setState(() => _previewImageUrl = staticMapImageurl);
+  }
+
+  // checking for servce is enabled and permission is granted
   bool _serviceEnabled;
   PermissionStatus _permissionGranted;
-  Future<void> _getCurrebtUserLocation() async {
+  Future<void> _getCurrentUserLocation() async {
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
@@ -30,22 +44,42 @@ class _LocationInputState extends State<LocationInput> {
         return;
       }
     }
+    try {
+      // intiate location
+      _locationData = await location.getLocation();
+      // show preview image
+      _showPreview(
+        latitude: _locationData.latitude,
+        longitude: _locationData.longitude,
+      );
 
-    // intiate location
-    _locationData = await location.getLocation();
-    final staticMapImageurl = LocationHelper.generateLocationPreviewImage(
-      latitude: _locationData.latitude,
-      longitude: _locationData.longitude,
-    );
-    setState(() => _previewImageUrl = staticMapImageurl);
+    // to access class element, we have to use widget  
+      widget.onSelectPlace(_locationData.latitude, _locationData.longitude);
+    } catch (error) {
+      return;
+    }
   }
 
+  // as map creation is a asynchronous task so we have to handle with Future and Builder
   Future<void> _selectOnMap() async {
-    final selectedLocation = await Navigator.of(context).push(MaterialPageRoute(
+    // get lat and lan data from map screen when we using pop
+    // final LatLng selectedLocation = await Navigator.of(context).push(MaterialPageRoute(
+    // or
+    final selectedLocation =
+        await Navigator.of(context).push<LatLng>(MaterialPageRoute(
       builder: (context) => MapScreen(isSelecting: true),
       fullscreenDialog: true,
     ));
+
     if (selectedLocation == null) return;
+
+    // show preview image
+    _showPreview(
+      latitude: selectedLocation.latitude,
+      longitude: selectedLocation.longitude,
+    );
+
+    widget.onSelectPlace(selectedLocation.latitude, selectedLocation.longitude);
   }
 
   @override
@@ -74,7 +108,7 @@ class _LocationInputState extends State<LocationInput> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             FlatButton.icon(
-              onPressed: _getCurrebtUserLocation,
+              onPressed: _getCurrentUserLocation,
               icon: Icon(
                 Icons.location_on,
               ),

@@ -10,7 +10,7 @@ class PlaceLocation {
   const PlaceLocation({
     @required this.latitude,
     @required this.longitude,
-    @required this.address,
+    this.address,
   });
 }
 
