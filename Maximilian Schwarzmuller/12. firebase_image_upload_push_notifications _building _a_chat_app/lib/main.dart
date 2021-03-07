@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/screens/chat_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -6,7 +7,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
    return MaterialApp(
-        title: 'My Native App',
+        title: 'Flutter Chat',
         theme: ThemeData(
           primarySwatch: Colors.purple,
           accentColor: Colors.amberAccent,
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
                 bodyText1: TextStyle(fontSize: 20),
               ),
         ),
+        home: ChatScreen(),
     );
   }
 }
