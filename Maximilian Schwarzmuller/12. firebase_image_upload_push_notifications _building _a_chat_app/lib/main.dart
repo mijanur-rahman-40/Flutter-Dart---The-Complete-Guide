@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/screens/auth_screens.dart';
 import 'package:flutter_chat_app/screens/chat_screen.dart';
 
 void main() async {
@@ -15,10 +16,27 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Chat',
       theme: ThemeData(
         primarySwatch: Colors.purple,
-        accentColor: Colors.amberAccent,
+        accentColor: Colors.deepPurple,
+        backgroundColor: Colors.pink,
         errorColor: Colors.red,
+        accentColorBrightness: Brightness.dark,
         secondaryHeaderColor: Colors.white,
         fontFamily: 'Raleway',
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.pinkAccent,
+            onPrimary: Theme.of(context).secondaryHeaderColor,
+            padding: EdgeInsets.symmetric(vertical: 13, horizontal: 30),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+          ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            primary: Theme.of(context).primaryColor 
+          ),
+        ),
         iconTheme: ThemeData.light()
             .iconTheme
             .copyWith(color: Colors.purple, size: 25),
@@ -38,7 +56,8 @@ class MyApp extends StatelessWidget {
               bodyText1: TextStyle(fontSize: 20),
             ),
       ),
-      home: ChatScreen(),
+      // home: ChatScreen(),
+      home: AuthScreen(),
     );
   }
 }
