@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_app/widgets/auth/auth_form.dart';
@@ -17,6 +20,7 @@ class _AuthScreenState extends State<AuthScreen> {
     String email,
     String password,
     String username,
+    File userImage,
     bool isLogin,
     BuildContext context,
   ) async {
@@ -34,12 +38,25 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email,
           password: password,
         );
+        // creating references and folder to upload image
+        final reference = FirebaseStorage.instance
+            .ref()
+            .child('user_image')
+            .child(userCredential.user.uid + '.jpg');
+        // upload the file
+        await reference.putFile(userImage);
+
+        // getting image url
+        final url = await reference.getDownloadURL();
+
+        // adding user data
         FirebaseFirestore.instance
             .collection('users')
             .doc(userCredential.user.uid)
             .set({
           'username': username,
           'email': email,
+          'image_url': url,
         });
       }
       // if platform interaction is failed

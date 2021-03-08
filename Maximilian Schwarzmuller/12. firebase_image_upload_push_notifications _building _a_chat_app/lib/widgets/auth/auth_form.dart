@@ -1,9 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/widgets/pickers/user_image_picker.dart';
 
 class AuthForm extends StatefulWidget {
   // here function is a type
-  final void Function(String email, String password, String username,
-      bool isLogin, BuildContext context) submitFunction;
+  final void Function(
+    String email,
+    String password,
+    String username,
+    File userImage,
+    bool isLogin,
+    BuildContext context,
+  ) submitFunction;
   final bool isLoading;
 
   AuthForm(
@@ -19,24 +28,42 @@ class _AuthFormState extends State<AuthForm> {
   final _formKey = GlobalKey<FormState>();
 
   var _isLogin = true;
+
   String _userEmail = '';
   String _userName = '';
   String _userPassword = '';
+  File _userImageFile;
 
   void _trySubmit() {
     final isValid = _formKey.currentState.validate();
     // remove focus from input fiels
     FocusScope.of(context).unfocus();
+
+    if (_userImageFile == null && !_isLogin) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please pick an image'),
+          backgroundColor: Theme.of(context).errorColor,
+        ),
+      );
+      return;
+    }
+
     if (isValid) {
       _formKey.currentState.save();
       widget.submitFunction(
         _userEmail.trim(),
         _userPassword.trim(),
         _userName.trim(),
+        _userImageFile,
         _isLogin,
         context,
       );
     }
+  }
+
+  void _pickedImage(File image) {
+    _userImageFile = image;
   }
 
   @override
@@ -44,7 +71,7 @@ class _AuthFormState extends State<AuthForm> {
     return Center(
       child: Card(
         elevation: 5,
-        margin: EdgeInsets.all(20),
+        margin: EdgeInsets.all(10),
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.all(10),
@@ -53,6 +80,7 @@ class _AuthFormState extends State<AuthForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
+                  if (!_isLogin) UserIamgePicker(_pickedImage),
                   TextFormField(
                     key: ValueKey('email'),
                     keyboardType: TextInputType.emailAddress,
