@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/widgets/chat/messages.dart';
 
 class ChatScreen extends StatelessWidget {
   @override
@@ -21,8 +22,7 @@ class ChatScreen extends StatelessWidget {
                     children: <Widget>[
                       Icon(
                         Icons.exit_to_app,
-                                      color: Theme.of(context).iconTheme.color,
-
+                        color: Theme.of(context).iconTheme.color,
                       ),
                       SizedBox(width: 8),
                       Text('Logout'),
@@ -42,28 +42,39 @@ class ChatScreen extends StatelessWidget {
         ],
       ),
       // StreamBuilder is a firebase builder that works like realtime data handling
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('chats/UMrLSClddfvaw9wV0hs6/messages')
-            .snapshots(),
-        builder: (BuildContext context,
-            AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-          if (streamSnapshot.connectionState == ConnectionState.waiting) {
-            Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          final documents = streamSnapshot.data.docs;
-          return ListView.builder(
-            itemCount: documents.length,
-            itemBuilder: (context, index) => Container(
-              padding: EdgeInsets.all(8),
-              child: Text(
-                documents[index]['text'],
-              ),
-            ),
-          );
-        },
+      body:
+          //  StreamBuilder(
+          //   stream: FirebaseFirestore.instance
+          //       .collection('chats/UMrLSClddfvaw9wV0hs6/messages')
+          //       .snapshots(),
+          //   builder: (BuildContext context,
+          //       AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+          //     if (streamSnapshot.connectionState == ConnectionState.waiting) {
+          //       Center(
+          //         child: CircularProgressIndicator(),
+          //       );
+          //     }
+          //     final documents = streamSnapshot.data.docs;
+          //     return ListView.builder(
+          //       itemCount: documents.length,
+          //       itemBuilder: (context, index) => Container(
+          //         padding: EdgeInsets.all(8),
+          //         child: Text(
+          //           documents[index]['text'],
+          //         ),
+          //       ),
+          //     );
+          //   },
+          // ),
+          Container(
+        child: Column(
+          children: [
+            // as list view will be rendered, So Expanded takes space as much as possible.
+            Expanded(
+              child: Messages(),
+            )
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
