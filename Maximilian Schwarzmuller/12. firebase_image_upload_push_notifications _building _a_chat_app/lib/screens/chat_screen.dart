@@ -1,7 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/widgets/chat/messages.dart';
+import 'package:flutter_chat_app/widgets/chat/new_message.dart';
 
 class ChatScreen extends StatelessWidget {
   @override
@@ -70,29 +71,28 @@ class ChatScreen extends StatelessWidget {
         child: Column(
           children: [
             // as list view will be rendered, So Expanded takes space as much as possible.
-            Expanded(
-              child: Messages(),
-            )
+            Expanded(child: Messages()),
+            NewMessage(),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          // FirebaseFirestore.instance
-          //     .collection('chats/UMrLSClddfvaw9wV0hs6/messages')
-          //     // snapshots basically return a stream(a object)
-          //     .snapshots()
-          //     .listen((data) {
-          //   data.docs.forEach((element) {
-          //     print(element.get('text'));
-          //   });
-          // });
-          FirebaseFirestore.instance
-              .collection('chats/UMrLSClddfvaw9wV0hs6/messages')
-              .add({'text': 'This was added by clicking the button'});
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Icon(Icons.add),
+      //   onPressed: () {
+      //     // FirebaseFirestore.instance
+      //     //     .collection('chats/UMrLSClddfvaw9wV0hs6/messages')
+      //     //     // snapshots basically return a stream(a object)
+      //     //     .snapshots()
+      //     //     .listen((data) {
+      //     //   data.docs.forEach((element) {
+      //     //     print(element.get('text'));
+      //     //   });
+      //     // });
+      //     FirebaseFirestore.instance
+      //         .collection('chats/UMrLSClddfvaw9wV0hs6/messages')
+      //         .add({'text': 'This was added by clicking the button'});
+      //   },
+      // ),
     );
   }
 }
