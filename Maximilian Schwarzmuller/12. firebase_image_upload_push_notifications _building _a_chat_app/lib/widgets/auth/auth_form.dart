@@ -4,7 +4,12 @@ class AuthForm extends StatefulWidget {
   // here function is a type
   final void Function(String email, String password, String username,
       bool isLogin, BuildContext context) submitFunction;
-  AuthForm(this.submitFunction);
+  final bool isLoading;
+
+  AuthForm(
+    this.submitFunction,
+    this.isLoading,
+  );
 
   @override
   _AuthFormState createState() => _AuthFormState();
@@ -14,18 +19,23 @@ class _AuthFormState extends State<AuthForm> {
   final _formKey = GlobalKey<FormState>();
 
   var _isLogin = true;
-  var _userEmail = '';
-  var _userName = '';
-  var _userPassword = '';
+  String _userEmail = '';
+  String _userName = '';
+  String _userPassword = '';
 
   void _trySubmit() {
     final isValid = _formKey.currentState.validate();
-    // remove focus fro input fiels
+    // remove focus from input fiels
     FocusScope.of(context).unfocus();
     if (isValid) {
       _formKey.currentState.save();
       widget.submitFunction(
-          _userEmail, _userName, _userPassword, _isLogin, context);
+        _userEmail.trim(),
+        _userPassword.trim(),
+        _userName.trim(),
+        _isLogin,
+        context,
+      );
     }
   }
 
@@ -39,6 +49,7 @@ class _AuthFormState extends State<AuthForm> {
           child: Padding(
             padding: EdgeInsets.all(10),
             child: Form(
+              key: _formKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
@@ -47,7 +58,15 @@ class _AuthFormState extends State<AuthForm> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(labelText: 'Email addresss'),
                     validator: (value) {
-                      if (value.isEmpty || !value.contains('@')) {
+                      // / regular expression for email validation
+                      Pattern pattern =
+                          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                          r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                          r"{0,253}[a-zA-Z0-9])?)*$";
+                      RegExp regExp = new RegExp(pattern);
+                      if (!regExp.hasMatch(value) ||
+                          value.isEmpty ||
+                          !value.contains('@')) {
                         return 'Please enter a valid email address';
                       }
                       return null;
@@ -87,10 +106,12 @@ class _AuthFormState extends State<AuthForm> {
                   SizedBox(
                     height: 12,
                   ),
-                  ElevatedButton(
-                    onPressed: _trySubmit,
-                    child: Text(_isLogin ? 'Login' : 'Signup'),
-                  ),
+                  widget.isLoading
+                      ? CircularProgressIndicator()
+                      : ElevatedButton(
+                          onPressed: _trySubmit,
+                          child: Text(_isLogin ? 'Login' : 'Signup'),
+                        ),
                   TextButton(
                     onPressed: () {
                       setState(() {

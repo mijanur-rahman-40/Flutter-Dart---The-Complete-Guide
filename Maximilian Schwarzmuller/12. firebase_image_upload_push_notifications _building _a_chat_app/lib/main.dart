@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/screens/auth_screens.dart';
@@ -33,9 +34,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            primary: Theme.of(context).primaryColor 
-          ),
+          style: TextButton.styleFrom(primary: Theme.of(context).primaryColor),
         ),
         iconTheme: ThemeData.light()
             .iconTheme
@@ -56,8 +55,15 @@ class MyApp extends StatelessWidget {
               bodyText1: TextStyle(fontSize: 20),
             ),
       ),
-      // home: ChatScreen(),
-      home: AuthScreen(),
+      // real time build straem for handling auth for firebase
+      home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, userSnapshot) {
+            if (userSnapshot.hasData) {
+              return ChatScreen();
+            }
+            return AuthScreen();
+          }),
     );
   }
 }

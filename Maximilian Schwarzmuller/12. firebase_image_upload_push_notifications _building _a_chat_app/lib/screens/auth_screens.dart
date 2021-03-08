@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +11,7 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   final _auth = FirebaseAuth.instance;
+  bool _isLoading = false;
 
   Future<void> _submitAuthForm(
     String email,
@@ -18,9 +20,10 @@ class _AuthScreenState extends State<AuthScreen> {
     bool isLogin,
     BuildContext context,
   ) async {
-    // user auth information 
+    // user success auth information
     UserCredential userCredential;
     try {
+      setState(() => _isLoading = true);
       if (isLogin) {
         userCredential = await _auth.signInWithEmailAndPassword(
           email: email,
@@ -31,9 +34,17 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email,
           password: password,
         );
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user.uid)
+            .set({
+          'username': username,
+          'email': email,
+        });
       }
+      // if platform interaction is failed
     } on PlatformException catch (error) {
-      var message = 'An error occureed, Pleae chaek your credienatials';
+      var message = 'An error occureed, Pleae check your credienatials';
       if (error.message != null) {
         message = error.message;
       }
@@ -44,8 +55,15 @@ class _AuthScreenState extends State<AuthScreen> {
           backgroundColor: Theme.of(context).errorColor,
         ),
       );
+      setState(() => _isLoading = false);
     } catch (error) {
-      print(error);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor: Theme.of(context).errorColor,
+        ),
+      );
+      setState(() => _isLoading = false);
     }
   }
 
@@ -53,7 +71,7 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: AuthForm(_submitAuthForm),
+      body: AuthForm(_submitAuthForm, _isLoading),
     );
   }
 }

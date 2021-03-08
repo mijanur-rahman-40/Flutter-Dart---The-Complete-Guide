@@ -1,10 +1,46 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('FlutterChat'),
+        actions: [
+          DropdownButton(
+            icon: Icon(
+              Icons.more_vert,
+              color: Theme.of(context).primaryIconTheme.color,
+            ),
+            items: [
+              DropdownMenuItem(
+                child: Container(
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.exit_to_app,
+                                      color: Theme.of(context).iconTheme.color,
+
+                      ),
+                      SizedBox(width: 8),
+                      Text('Logout'),
+                    ],
+                  ),
+                ),
+                // value as a identifier
+                value: 'logout',
+              ),
+            ],
+            onChanged: (itemIdentifier) {
+              if (itemIdentifier == 'logout') {
+                FirebaseAuth.instance.signOut();
+              }
+            },
+          ),
+        ],
+      ),
       // StreamBuilder is a firebase builder that works like realtime data handling
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -12,7 +48,7 @@ class ChatScreen extends StatelessWidget {
             .snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-          if (streamSnapshot.connectionState == ConnectionState.none) {
+          if (streamSnapshot.connectionState == ConnectionState.waiting) {
             Center(
               child: CircularProgressIndicator(),
             );
@@ -43,9 +79,7 @@ class ChatScreen extends StatelessWidget {
           // });
           FirebaseFirestore.instance
               .collection('chats/UMrLSClddfvaw9wV0hs6/messages')
-              .add({
-                'text':'This was added by clicking the button'
-              });
+              .add({'text': 'This was added by clicking the button'});
         },
       ),
     );
