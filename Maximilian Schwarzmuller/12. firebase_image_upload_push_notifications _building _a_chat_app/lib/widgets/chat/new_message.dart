@@ -22,7 +22,8 @@ class _NewMessageState extends State<NewMessage> {
       // time stamp comes with cloud firestore
       'createdAt': Timestamp.now(),
       'userId': user.uid,
-      'username':userData['username']
+      'username':userData['username'],
+      'userImage':userData['image_url']
     });
     _textEditController.clear();
   }

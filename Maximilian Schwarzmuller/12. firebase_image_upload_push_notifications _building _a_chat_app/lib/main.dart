@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
               bodyText1: TextStyle(fontSize: 20),
             ),
       ),
-      // real time build straem for handling auth for firebase
+      // real time build stream for handling auth for firebase
       home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, userSnapshot) {
