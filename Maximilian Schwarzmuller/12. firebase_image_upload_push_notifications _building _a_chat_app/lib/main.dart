@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/screens/auth_screens.dart';
 import 'package:flutter_chat_app/screens/chat_screen.dart';
@@ -7,6 +8,30 @@ import 'package:flutter_chat_app/screens/chat_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  // need permission only for ios and web
+  FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  NotificationSettings settings = await firebaseMessaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    print('User granted permission');
+  } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+    print('User granted provisional permission');
+  } else {
+    print('User declined or has not accepted permission');
+  }
+
+    // need permission only for ios and web
+    // need permission only for ios and web
+
   runApp(MyApp());
 }
 
