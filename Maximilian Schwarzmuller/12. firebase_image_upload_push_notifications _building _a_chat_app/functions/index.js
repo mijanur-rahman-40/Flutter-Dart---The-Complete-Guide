@@ -10,6 +10,9 @@ const admin = require("firebase-admin");
 //   functions.logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
 // });
+
+admin.initializeApp();
+
 exports.myChatFunction = functions.firestore
     .document("chat/{message}")
     .onCreate((snapshot, context) => {

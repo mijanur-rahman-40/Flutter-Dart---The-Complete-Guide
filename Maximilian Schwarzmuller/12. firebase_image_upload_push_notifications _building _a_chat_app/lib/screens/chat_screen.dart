@@ -15,6 +15,10 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
 
+    // subnscribed to chat
+    FirebaseMessaging.instance.subscribeToTopic('chat');
+
+    // works when app is on terminate mode
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((RemoteMessage message) {
@@ -38,7 +42,7 @@ class _ChatScreenState extends State<ChatScreen> {
       }
     });
 
-    // app is open by notification tab when app on background and terminetted
+    // app is open by notification tab when app on background or terminatted
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('A new onMessageOpenedApp event was published!');
       RemoteNotification notification = message.notification;
@@ -46,6 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
       //  Navigator
       print('Hello world3');
     });
+
     // when app into background
     // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
@@ -62,6 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
         title: Text('FlutterChat'),
         actions: [
           DropdownButton(
+            underline: Container(),
             icon: Icon(
               Icons.more_vert,
               color: Theme.of(context).primaryIconTheme.color,
