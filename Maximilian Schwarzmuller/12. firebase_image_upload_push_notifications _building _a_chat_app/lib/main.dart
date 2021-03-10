@@ -30,8 +30,6 @@ void main() async {
     print('User declined or has not accepted permission');
   }
 
-  // need permission only for ios and web
-
   runApp(MyApp());
 }
 
@@ -80,18 +78,20 @@ class MyApp extends StatelessWidget {
               bodyText1: TextStyle(fontSize: 20),
             ),
       ),
+
       // real time build stream for handling auth for firebase
       home: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, userSnapshot) {
-            if (userSnapshot.connectionState == ConnectionState.waiting) {
-              return SplashScreen();
-            }
-            if (userSnapshot.hasData) {
-              return ChatScreen();
-            }
-            return AuthScreen();
-          }),
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, userSnapshot) {
+          if (userSnapshot.connectionState == ConnectionState.waiting) {
+            return SplashScreen();
+          }
+          if (userSnapshot.hasData) {
+            return ChatScreen();
+          }
+          return AuthScreen();
+        },
+      ),
     );
   }
 }
