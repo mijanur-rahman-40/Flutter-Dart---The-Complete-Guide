@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:myapp/configuration/secrets.dart';
+import 'package:myapp/config/secrets.dart';
 
 
 class LocationHelper {
