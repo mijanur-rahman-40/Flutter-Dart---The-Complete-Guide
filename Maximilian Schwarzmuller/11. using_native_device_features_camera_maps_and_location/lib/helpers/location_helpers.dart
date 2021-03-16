@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:myapp/config/secrets.dart';
 
+// GOOGLE_API_KEY is imported from as staic const
 
 class LocationHelper {
   // return a string image url
